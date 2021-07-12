@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Card, Button, Rate, Input } from "antd";
+import TextArea from "../../../Components/GoogleMap/ui/form/Textarea";
+import { Card, Button, Rate } from "antd";
 import ModalComponsant from "../Modal/Modal";
 import styled from "styled-components";
 import smallKey from "../../../services/smallKeyGen";
 import "antd/dist/antd.css";
+import { useForm } from "react-hook-form";
 
 export const ContainerFlex = styled.div`
   display: flex;
@@ -16,21 +18,17 @@ export const P = styled.p`
 `;
 
 export default function RestaurantComponent({ e }) {
-  const [value, setValue] = useState();
+  const [defaultValues, setDefaultValues] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalVisibleTwo, setIsModalVisibleTwo] = useState(false);
 
-  const { TextArea } = Input;
+  const { handleSubmit, watch } = useForm({
+    defaultValues,
+  });
 
-  const handleChange = (event) => {
-    setValue({ value: event.target.value });
+  const submit = (data) => {
+    console.log(data);
   };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
-
-  console.log(value, " VALUUEEEEEE ");
 
   return (
     <Card title={e.restaurantName} style={{ width: 300 }}>
@@ -62,10 +60,10 @@ export default function RestaurantComponent({ e }) {
           onCancel={() => setIsModalVisibleTwo(false)}
         >
           <P>Mon avis</P>
-          <form onSubmit={handleSubmit}>
-            <TextArea rows={4} value={setValue} onChange={handleChange} />
+          <form onSubmit={handleSubmit(submit)}>
+            <TextArea rows={4} name="comment" />
             <P>Evaluer moi</P>
-            <Rate onChange={handleChange} />
+            <Rate name="rating" />
           </form>
         </ModalComponsant>
       </ContainerFlex>

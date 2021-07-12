@@ -4,7 +4,7 @@ import "antd/dist/antd.css";
 
 export default function ModalComponsant({ open, onCancel, children }) {
   return (
-    <Modal title="XD" onCancel={onCancel} visible={open}>
+    <Modal title="Bienvenue" onCancel={onCancel} visible={open}>
       {children}
     </Modal>
   );
