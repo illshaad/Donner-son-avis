@@ -37,12 +37,12 @@ export default function ListRestaurant() {
 
   // console.log(dataRestaurant);
 
-  const somme = data.map((e) => {
-    return e.ratings[0].stars;
-  });
+  // const somme = data.map((e) => {
+  //   return e.ratings[0].stars;
+  // });
 
-  const reducer = (a, b) => (a + b) / data[0].ratings.length;
-  const final = somme.reduce(reducer);
+  // const reducer = (a, b) => (a + b) / data[0].ratings.length;
+  // const final = somme.reduce(reducer);
 
   return (
     <div>
