@@ -1,34 +1,37 @@
 import React, { useState } from "react";
 import TextArea from "../../../Components/GoogleMap/ui/form/Textarea";
-import { Card, Button, Rate } from "antd";
+import { Card, Button, Rate, Form, Input } from "antd";
 import ModalComponsant from "../Modal/Modal";
 import styled from "styled-components";
 import smallKey from "../../../services/smallKeyGen";
 import "antd/dist/antd.css";
-import { useForm } from "react-hook-form";
-
-export const ContainerFlex = styled.div`
-  display: flex;
-  justify-content: space-around;
-`;
-
-export const P = styled.p`
-  font-size: 18px;
-  margin-top: 10px;
-`;
+import { useForm, Controller, set } from "react-hook-form";
 
 export default function RestaurantComponent({ e }) {
-  const [defaultValues, setDefaultValues] = useState({});
+  console.log(e);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalVisibleTwo, setIsModalVisibleTwo] = useState(false);
+  const [valueRating, setValueRating] = useState();
 
-  const { handleSubmit, watch } = useForm({
-    defaultValues,
-  });
+  const { register, handleSubmit, watch } = useForm();
+
+  const Text = watch("message");
+  console.log(Text);
 
   const submit = (data) => {
-    console.log(data);
+    setIsModalVisibleTwo(!true);
+    setIsModalVisible(!false);
   };
+
+  const somme = e[0].map((f) => {
+    return f.ratings[0].stars;
+  });
+
+  console.log(somme);
+
+  const reducer = (a, b) => (a + b) / e.ratings.length;
+  const final = somme.reduce(reducer);
+  console.log(final, " MOYENNE");
 
   return (
     <Card title={e.restaurantName} style={{ width: 300 }}>
@@ -61,12 +64,23 @@ export default function RestaurantComponent({ e }) {
         >
           <P>Mon avis</P>
           <form onSubmit={handleSubmit(submit)}>
-            <TextArea rows={4} name="comment" />
-            <P>Evaluer moi</P>
-            <Rate name="rating" />
+            <TextArea {...register("message")}></TextArea>
+            <P>Notez moi !</P>
+            <Rate />
+            <button type="submit">cliquer</button>
           </form>
         </ModalComponsant>
       </ContainerFlex>
     </Card>
   );
 }
+
+export const ContainerFlex = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
+export const P = styled.p`
+  font-size: 18px;
+  margin-top: 10px;
+`;
