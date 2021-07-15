@@ -1,6 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from "react";
-import { GoogleMap, LoadScript, Circle } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  LoadScript,
+  Marker,
+  InfoWindow,
+} from "@react-google-maps/api";
 import ListRestaurant from "./Restaurants/ListRestaurant";
 import styled from "styled-components";
 import { PositionMaps, styledMap } from "./MapGoogle.style";
@@ -37,7 +42,6 @@ export const ContainerFlex = styled.div`
 `;
 
 export default function MapGoogle() {
-  // const [data, setData] = useState([]);
   // const [dataGeo, setDataGeo] = useState();
   // const { latitude, longitude } = usePosition();
 
@@ -50,7 +54,7 @@ export default function MapGoogle() {
     <ContainerFlex>
       <div>
         <PositionMaps>
-          <LoadScript googleMapsApiKey="AIzaSyD4afasVA6806Yo13HuY4DdrwoAs_4O9g0">
+          <LoadScript googleMapsApiKey="AIzaSyCKOfitYFhHUcLB1_VIy6WdK9VqXO7jSyM">
             <GoogleMap
               defaultCenter={{ lat: 48.8499198, lng: 2.6370411 }}
               mapContainerStyle={mapStyles}
@@ -58,21 +62,13 @@ export default function MapGoogle() {
               center={defaultCenter}
               options={options}
             >
-              return (
               {data &&
                 data.map((item, index) => {
                   const lagLng = {
                     lat: item.lat,
                     lng: item.long,
                   };
-                  return (
-                    <Circle
-                      key={index}
-                      id="circle-example"
-                      center={lagLng}
-                      options={options}
-                    />
-                  );
+                  return <Marker index={index} position={lagLng} />;
                 })}
             </GoogleMap>
           </LoadScript>
