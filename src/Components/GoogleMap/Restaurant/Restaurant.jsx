@@ -20,74 +20,74 @@ export default function RestaurantComponent({ e }) {
       comment: data.message,
       stars: currentValue,
     };
-
     setAvis((preState) => [...preState, update]);
     setIsModalVisibleTwo(!true);
     setIsModalVisible(!false);
   };
 
-  //MOYENNNE //
+  ////////////////////////////////////////////MOYENNNE//////////////////////////////////////////////////////////////////////
   const total = [];
   for (let i = 0; i < avis.length; i++) {
     total.push(avis[i].stars);
   }
   const reducer = (a, b) => (a + b) / total.length;
   const moyenne = Math.round(total.reduce(reducer) * 100) / 100;
-
-  ////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   return (
-    <Card
-      style={{ marginTop: "50px", width: 250 }}
-      cover={
-        <img
-          alt="example"
-          src={`https://maps.googleapis.com/maps/api/streetview?size=250x150&location=${e.lat},${e.long}&heading=151.78&pitch=-0.76&key=AIzaSyCKOfitYFhHUcLB1_VIy6WdK9VqXO7jSyM`}
-        />
-      }
-      actions={[
-        <p onClick={() => setIsModalVisible(true)}>Avis</p>,
-        <ModalComponsant
-          open={isModalVisible}
-          onCancel={() => setIsModalVisible(false)}
-          restaurantName={e.restaurantName}
-        >
-          {avis &&
-            avis.map((e) => (
-              <div key={smallKey(10)}>
-                <P>{e.comment}</P>
-                <Rate defaultValue={e.stars} />
-              </div>
-            ))}
-        </ModalComponsant>,
+    <>
+      <Card
+        style={{ marginTop: "50px", width: 250 }}
+        cover={
+          <img
+            alt="example"
+            src={`https://maps.googleapis.com/maps/api/streetview?size=250x150&location=${e.lat},${e.long}&heading=151.78&pitch=-0.76&key=AIzaSyCKOfitYFhHUcLB1_VIy6WdK9VqXO7jSyM`}
+          />
+        }
+        actions={[
+          <p onClick={() => setIsModalVisible(true)}>Avis</p>,
+          <ModalComponsant
+            open={isModalVisible}
+            onCancel={() => setIsModalVisible(false)}
+            restaurantName={e.restaurantName}
+          >
+            {avis &&
+              avis.map((e) => (
+                <div key={smallKey(10)}>
+                  <P>{e.comment}</P>
+                  <Rate disabled="true" defaultValue={e.stars} />
+                </div>
+              ))}
+          </ModalComponsant>,
 
-        <p onClick={() => setIsModalVisibleTwo(true)}>Ajouter</p>,
-        <ModalComponsant
-          restaurantName={e.restaurantName}
-          open={isModalVisibleTwo}
-          onCancel={() => setIsModalVisibleTwo(false)}
-        >
-          <P>Veuillez laissez un avis </P>
-          <form onSubmit={handleSubmit(submit)}>
-            <TextArea {...register("message")}></TextArea>
-            <P>Notez moi !</P>
-            <Rate
-              onChange={(value) => {
-                setCurrentValue(value);
-              }}
-              value={currentValue}
-            />
-            <button type="submit">cliquer</button>
-          </form>
-        </ModalComponsant>,
-      ]}
-    >
-      <Meta
-        title={e.restaurantName}
-        description={<Adress>{e.address}</Adress>}
-      />
-      <Rate disabled="true" allowHalf defaultValue={moyenne} />
-    </Card>
+          <p onClick={() => setIsModalVisibleTwo(true)}>Ajouter</p>,
+          <ModalComponsant
+            restaurantName={e.restaurantName}
+            open={isModalVisibleTwo}
+            onCancel={() => setIsModalVisibleTwo(false)}
+          >
+            <P>Veuillez laissez un avis </P>
+            <form onSubmit={handleSubmit(submit)}>
+              <TextArea {...register("message")}></TextArea>
+              <P>Notez moi !</P>
+              <Rate
+                onChange={(value) => {
+                  setCurrentValue(value);
+                }}
+                value={currentValue}
+              />
+              <button type="submit">cliquer</button>
+            </form>
+          </ModalComponsant>,
+        ]}
+      >
+        <Meta
+          title={e.restaurantName}
+          description={<Adress>{e.address}</Adress>}
+        />
+        <Rate disabled="true" allowHalf defaultValue={moyenne} />
+      </Card>
+    </>
   );
 }
 

@@ -5,8 +5,10 @@ import data from "../../../Data/data.json";
 import Axios from "axios";
 import styled from "styled-components";
 import RestaurantComponent from "../Restaurant/Restaurant";
-
+import { Select } from "antd";
 export default function ListRestaurant() {
+  const { Option } = Select;
+
   // <script
   //   async
   //   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYp9N3XPj-uQynBag2rvGZBcpMvibpJ8Q&libraries=places&callback=initMap"
@@ -28,6 +30,14 @@ export default function ListRestaurant() {
   return (
     <div>
       <H1>Liste des restaurants</H1>
+      <Select style={{ width: 200 }}>
+        <Option value="1">1 etoile</Option>
+        <Option value="2">2 etoiles</Option>
+        <Option value="3">3 etoiles</Option>
+        <Option value="4">4 etoiles</Option>
+        <Option value="5">5 etoiles</Option>
+      </Select>
+
       {data.map((e) => (
         <RestaurantComponent e={e} />
       ))}
