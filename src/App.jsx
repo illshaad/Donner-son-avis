@@ -6,6 +6,7 @@ function App() {
   return (
     <div className="App">
       <h1>Lancez votre propre site d'avis de restaurants</h1>
+      <p>Un double clique sur la map pour ajouter un nouveau restaurant</p>
       <GoogleMap />
     </div>
   );

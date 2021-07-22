@@ -4,10 +4,11 @@ import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import ListRestaurant from "./Restaurants/ListRestaurant";
 import styled from "styled-components";
 import { PositionMaps, styledMap } from "./MapGoogle.style";
-import data from "../../Data/data.json";
+import dataJson from "../../Data/data.json";
 import { Input } from "antd";
 import ModalComposantRestaurant from "./Modal/ModalAddRestaurant";
 import { useForm } from "react-hook-form";
+import Axios from "axios";
 
 const options = {
   styles: styledMap,
@@ -35,22 +36,45 @@ export const ContainerFlex = styled.div`
 `;
 
 export default function MapGoogle() {
-  // const [dataGeo, setDataGeo] = useState();
-  // const { latitude, longitude } = usePosition();
+  const [data, setData] = useState(dataJson);
+  const [position, setPosition] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { register, handleSubmit } = useForm();
 
   const submit = (data) => {
-    console.log(data);
-    // const update = {
-    //   comment: data.message,
-    // };
+    const update = {
+      restaurantName: data.restaurantName,
+      address: position.address,
+      lat: position.lat,
+      lng: position.lng,
+      ratings: [
+        {
+          stars: null,
+          comment: null,
+        },
+      ],
+      // description: data.description,
+    };
+    setData((prevState) => [...prevState, update]);
+    setIsModalVisible(false);
   };
 
-  const addRestaurant = () => {
+  const addRestaurant = async (lat, lng) => {
+    const { data: geo } = await Axios.get(`
+      https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat.lat},${lat.lng}&key=AIzaSyCKOfitYFhHUcLB1_VIy6WdK9VqXO7jSyM
+      `);
+    setPosition({
+      address: geo.results[0].formatted_address,
+      lat: lat.lat,
+      lng: lat.lng,
+    });
     setIsModalVisible(true);
+    return geo;
   };
+
+  // console.log(position.address);
+
   const mapStyles = {
     width: "1080px",
     height: "600px",
@@ -62,7 +86,9 @@ export default function MapGoogle() {
         <PositionMaps>
           <LoadScript googleMapsApiKey="AIzaSyCKOfitYFhHUcLB1_VIy6WdK9VqXO7jSyM">
             <GoogleMap
-              onDblClick={addRestaurant}
+              onDblClick={(e) =>
+                addRestaurant({ lat: e.latLng.lat(), lng: e.latLng.lng() })
+              }
               mapContainerStyle={mapStyles}
               zoom={12}
               center={{ lat: 48.866667, lng: 2.333333 }}
@@ -72,10 +98,11 @@ export default function MapGoogle() {
                 data.map((item, index) => {
                   const lagLng = {
                     lat: item.lat,
-                    lng: item.long,
+                    lng: item.lng,
                   };
                   return <Marker index={index} position={lagLng} />;
                 })}
+
               <ModalComposantRestaurant
                 open={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
@@ -84,15 +111,19 @@ export default function MapGoogle() {
                   <P>Nom - Prenom du Restaurant</P>
                   <Input
                     placeholder="Nom - Prenom"
-                    {...register("nom")}
+                    {...register("restaurantName")}
                   ></Input>
                   <P>Adresse du Restaurant</P>
-                  <Input placeholder="Adresse" {...register("adresse")}></Input>
-                  <P>Description du restaurant</P>
+                  <Input
+                    placeholder="Adresse"
+                    {...register("address")}
+                    defaultValue={position?.address}
+                  ></Input>
+                  {/* <P>Description du restaurant</P>
                   <Input
                     placeholder="Description"
                     {...register("description")}
-                  ></Input>
+                  ></Input> */}
 
                   <button type="submit">Ajouter</button>
                 </form>

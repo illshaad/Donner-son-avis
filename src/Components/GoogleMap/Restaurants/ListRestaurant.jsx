@@ -1,28 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useQuery } from "react-query";
 import "./index.css";
-import data from "../../../Data/data.json";
-import Axios from "axios";
 import styled from "styled-components";
 import RestaurantComponent from "../Restaurant/Restaurant";
 import { Slider } from "antd";
-export default function ListRestaurant() {
-  // <script
-  //   async
-  //   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYp9N3XPj-uQynBag2rvGZBcpMvibpJ8Q&libraries=places&callback=initMap"
-  // ></script>;
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const result = await Axios.get(
-  //       `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=48.8499198,2.6370411&radius=1500&type=restaurant&key=AIzaSyAYp9N3XPj-uQynBag2rvGZBcpMvibpJ8Q`
-  //     );
-  //     console.log(result);
-  //     setDataRestaurant(result.results);
-  //   };
-  //   fetchData();
-  // }, []);
-
+export default function ListRestaurant({ data }) {
   const newData = [];
   data.length > 0 &&
     data.map((e) => {
@@ -33,13 +14,14 @@ export default function ListRestaurant() {
       return newData.push(obj);
     });
 
-  console.log(newData);
+  console.log(newData, "dataici");
+
   const filter = (value) => {
-    console.log(value);
+    // console.log(value);
     const filtered = newData.filter(
       (e) => e.moyenne > value[0] && e.moyenne < value[1]
     );
-    console.log(filtered);
+    // console.log(filtered);
   };
 
   return (

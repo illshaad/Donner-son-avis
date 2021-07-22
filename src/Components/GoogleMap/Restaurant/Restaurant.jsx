@@ -12,10 +12,10 @@ export default function RestaurantComponent({ e }) {
   const [isModalVisibleTwo, setIsModalVisibleTwo] = useState(false);
   const [currentValue, setCurrentValue] = useState();
   const [avis, setAvis] = useState(e.ratings);
-
   const { Meta } = Card;
   const { register, handleSubmit } = useForm();
 
+  console.log(avis, "?????");
   const submit = (data) => {
     const update = {
       comment: data.message,
@@ -33,7 +33,7 @@ export default function RestaurantComponent({ e }) {
         cover={
           <img
             alt="example"
-            src={`https://maps.googleapis.com/maps/api/streetview?size=250x150&location=${e.lat},${e.long}&heading=151.78&pitch=-0.76&key=AIzaSyCKOfitYFhHUcLB1_VIy6WdK9VqXO7jSyM`}
+            src={`https://maps.googleapis.com/maps/api/streetview?size=250x150&location=${e.lat},${e.lng}&heading=151.78&pitch=-0.76&key=AIzaSyCKOfitYFhHUcLB1_VIy6WdK9VqXO7jSyM`}
           />
         }
         actions={[
