@@ -1,20 +1,13 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from "react";
-import {
-  GoogleMap,
-  LoadScript,
-  Marker,
-  InfoWindow,
-} from "@react-google-maps/api";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import ListRestaurant from "./Restaurants/ListRestaurant";
 import styled from "styled-components";
 import { PositionMaps, styledMap } from "./MapGoogle.style";
 import data from "../../Data/data.json";
-
-const defaultCenter = {
-  lat: 48.8499198,
-  lng: 2.6370411,
-};
+import { Input } from "antd";
+import ModalComposantRestaurant from "./Modal/ModalAddRestaurant";
+import { useForm } from "react-hook-form";
 
 const options = {
   styles: styledMap,
@@ -44,7 +37,20 @@ export const ContainerFlex = styled.div`
 export default function MapGoogle() {
   // const [dataGeo, setDataGeo] = useState();
   // const { latitude, longitude } = usePosition();
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const { register, handleSubmit } = useForm();
+
+  const submit = (data) => {
+    console.log(data);
+    // const update = {
+    //   comment: data.message,
+    // };
+  };
+
+  const addRestaurant = () => {
+    setIsModalVisible(true);
+  };
   const mapStyles = {
     width: "1080px",
     height: "600px",
@@ -56,10 +62,10 @@ export default function MapGoogle() {
         <PositionMaps>
           <LoadScript googleMapsApiKey="AIzaSyCKOfitYFhHUcLB1_VIy6WdK9VqXO7jSyM">
             <GoogleMap
-              defaultCenter={{ lat: 48.8499198, lng: 2.6370411 }}
+              onDblClick={addRestaurant}
               mapContainerStyle={mapStyles}
               zoom={12}
-              center={defaultCenter}
+              center={{ lat: 48.866667, lng: 2.333333 }}
               options={options}
             >
               {data &&
@@ -70,6 +76,27 @@ export default function MapGoogle() {
                   };
                   return <Marker index={index} position={lagLng} />;
                 })}
+              <ModalComposantRestaurant
+                open={isModalVisible}
+                onCancel={() => setIsModalVisible(false)}
+              >
+                <form onSubmit={handleSubmit(submit)}>
+                  <P>Nom - Prenom du Restaurant</P>
+                  <Input
+                    placeholder="Nom - Prenom"
+                    {...register("nom")}
+                  ></Input>
+                  <P>Adresse du Restaurant</P>
+                  <Input placeholder="Adresse" {...register("adresse")}></Input>
+                  <P>Description du restaurant</P>
+                  <Input
+                    placeholder="Description"
+                    {...register("description")}
+                  ></Input>
+
+                  <button type="submit">Ajouter</button>
+                </form>
+              </ModalComposantRestaurant>
             </GoogleMap>
           </LoadScript>
         </PositionMaps>
@@ -80,3 +107,8 @@ export default function MapGoogle() {
     </ContainerFlex>
   );
 }
+
+export const P = styled.p`
+  font-size: 14px;
+  margin-top: 10px;
+`;

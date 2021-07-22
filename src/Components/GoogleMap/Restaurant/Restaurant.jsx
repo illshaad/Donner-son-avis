@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import TextArea from "../../../Components/GoogleMap/ui/form/Textarea";
+import TextArea from "../ui/form/Textarea";
 import { Card, Rate } from "antd";
 import ModalComponsant from "../Modal/Modal";
 import styled from "styled-components";
@@ -12,6 +12,7 @@ export default function RestaurantComponent({ e }) {
   const [isModalVisibleTwo, setIsModalVisibleTwo] = useState(false);
   const [currentValue, setCurrentValue] = useState();
   const [avis, setAvis] = useState(e.ratings);
+
   const { Meta } = Card;
   const { register, handleSubmit } = useForm();
 
@@ -24,15 +25,6 @@ export default function RestaurantComponent({ e }) {
     setIsModalVisibleTwo(!true);
     setIsModalVisible(!false);
   };
-
-  ////////////////////////////////////////////MOYENNNE//////////////////////////////////////////////////////////////////////
-  const total = [];
-  for (let i = 0; i < avis.length; i++) {
-    total.push(avis[i].stars);
-  }
-  const reducer = (a, b) => (a + b) / total.length;
-  const moyenne = Math.round(total.reduce(reducer) * 100) / 100;
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   return (
     <>
@@ -69,14 +61,14 @@ export default function RestaurantComponent({ e }) {
             <P>Veuillez laissez un avis </P>
             <form onSubmit={handleSubmit(submit)}>
               <TextArea {...register("message")}></TextArea>
-              <P>Notez moi !</P>
+              <P>Noter moi !</P>
               <Rate
                 onChange={(value) => {
                   setCurrentValue(value);
                 }}
                 value={currentValue}
               />
-              <button type="submit">cliquer</button>
+              <button type="submit">Je note !</button>
             </form>
           </ModalComponsant>,
         ]}
@@ -85,7 +77,7 @@ export default function RestaurantComponent({ e }) {
           title={e.restaurantName}
           description={<Adress>{e.address}</Adress>}
         />
-        <Rate disabled="true" allowHalf defaultValue={moyenne} />
+        <Rate disabled="true" allowHalf defaultValue={e.moyenne} />
       </Card>
     </>
   );
