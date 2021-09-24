@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { PositionMaps, styledMap } from "./MapGoogle.style";
 import dataJson from "../../Data/data.json";
 import { Input } from "antd";
+import { usePosition } from "use-position";
 import ModalComposantRestaurant from "./Modal/ModalAddRestaurant";
 import { useForm } from "react-hook-form";
 import Axios from "axios";
@@ -42,6 +43,12 @@ export default function MapGoogle() {
 
   const { register, handleSubmit } = useForm();
 
+  const watch = true;
+  const { latitude, longitude, speed, timestamp, accuracy, error } =
+    usePosition(watch);
+
+  useEffect(() => {}, [data]);
+
   const submit = (data) => {
     const update = {
       restaurantName: data.restaurantName,
@@ -50,8 +57,8 @@ export default function MapGoogle() {
       lng: position.lng,
       ratings: [
         {
-          stars: null,
-          comment: null,
+          stars: 1,
+          comment: "",
         },
       ],
       // description: data.description,
@@ -70,6 +77,7 @@ export default function MapGoogle() {
       lng: lat.lng,
     });
     setIsModalVisible(true);
+
     return geo;
   };
 
@@ -84,7 +92,7 @@ export default function MapGoogle() {
     <ContainerFlex>
       <div>
         <PositionMaps>
-          <LoadScript googleMapsApiKey="AIzaSyCKOfitYFhHUcLB1_VIy6WdK9VqXO7jSyM">
+          <LoadScript googleMapsApiKey="AIzaSyC0iQDHGXaDAQ_Os9Boc6vxGrPZHcYQHzo">
             <GoogleMap
               onDblClick={(e) =>
                 addRestaurant({ lat: e.latLng.lat(), lng: e.latLng.lng() })
@@ -128,12 +136,25 @@ export default function MapGoogle() {
                   <button type="submit">Ajouter</button>
                 </form>
               </ModalComposantRestaurant>
+              <code>
+                latitude: {latitude}
+                <br />
+                longitude: {longitude}
+                <br />
+                speed: {speed}
+                <br />
+                timestamp: {timestamp}
+                <br />
+                accuracy: {accuracy && `${accuracy}m`}
+                <br />
+                error: {error}
+              </code>
             </GoogleMap>
           </LoadScript>
         </PositionMaps>
       </div>
       <div>
-        <ListRestaurant data={data} />
+        <ListRestaurant data={data} setData={setData} />
       </div>
     </ContainerFlex>
   );
